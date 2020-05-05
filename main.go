@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"lottery/colly"
+	"lottery/dlt"
 )
 
 func main() {
@@ -29,4 +30,6 @@ func main() {
 		pageUri := colly.GetDLTPageUrl(i)
 		colly.DltColly(pageUri)
 	}
+	dlt.CalcParity()
+
 }

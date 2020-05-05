@@ -2,6 +2,7 @@ package dao
 
 import (
 	"fmt"
+	"lottery/logger"
 	"strconv"
 )
 
@@ -63,4 +64,28 @@ func GetDLTRowById(id int) Dlt {
 		fmt.Printf("get dlt row by id err,err:[%v]\n", err)
 	}
 	return dlt
+}
+
+func GetDLTCount() int {
+	sqlStr := "SELECT COUNT(id) AS 'total' FROM dlt;"
+	var total int
+	rows := DB.QueryRow(sqlStr)
+	if rows != nil {
+		logger.NewFileLogger("error").Error("get dlt count error,err:%v\n", rows)
+	}
+	err := rows.Scan(&total)
+	if rows != nil {
+		logger.NewFileLogger("error").Error("get dlt count error,err:%v\n", err)
+	}
+	return total
+}
+
+func GetDLTRows(offset, limit int) []Dlt {
+	sqlStr := "SELECT id,num,num_1,num_2,num_3,num_4,num_5,num_6,num_7,open_time FROM dlt ORDER BY id DESC Limit ?,?;"
+	var dlts []Dlt
+	err := DB.Select(&dlts, sqlStr, offset, limit)
+	if err != nil {
+		fmt.Printf("get dlt row by id err,err:[%v]\n", err)
+	}
+	return dlts
 }
